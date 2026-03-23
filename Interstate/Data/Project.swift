@@ -10,9 +10,9 @@ import SwiftData
 
 @Model
 final class Project {
-    var id = UUID()
-    var title: String
-    @Relationship(deleteRule: .cascade) var items: [Item]
+    var id: UUID = UUID()
+    var title: String = "New Project"
+    @Relationship(deleteRule: .cascade, inverse: \Item.project) var items: [Item]? = []
 
     init(title: String = "New Project", items: [Item] = []) {
         self.title = title
