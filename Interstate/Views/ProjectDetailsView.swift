@@ -15,7 +15,9 @@ struct ProjectDetailsView: View {
 
     var body: some View {
         List {
-            ForEach(project.items) { item in
+            ForEach(project.items.sorted(by: {
+                $0.timestamp.compare($1.timestamp) == .orderedAscending
+            })) { item in
                 let date = Date.FormatStyle(date: .omitted, time: .shortened).format(item.timestamp)
                 let text = item.entry.isEmpty ? "[No description]" : item.entry
 
@@ -24,6 +26,7 @@ struct ProjectDetailsView: View {
                 } label: {
                     Text("\(date): \(text)")
                 }
+                .buttonStyle(.plain)
             }
             .onDelete(perform: deleteItems)
         }
@@ -43,6 +46,7 @@ struct ProjectDetailsView: View {
                 Button(action: addItem) {
                     Label("Add Item", systemImage: "plus")
                 }
+                .keyboardShortcut(.defaultAction)
             }
         }
         .navigationTitle($project.title)
