@@ -28,5 +28,14 @@ struct InterstateApp: App {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
+
+        #if os(macOS)
+        MenuBarExtra("Interstate High Speed",
+                     systemImage: "pencil.circle.fill") {
+            MenuBarView()
+        }
+        .menuBarExtraStyle(.window)
+        .modelContainer(sharedModelContainer)
+        #endif
     }
 }
