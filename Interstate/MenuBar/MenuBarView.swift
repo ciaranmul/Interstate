@@ -12,6 +12,7 @@ struct MenuBarView: View {
     var body: some View {
         NavigationStack {
             MenuBarProjectsList()
+                .fixedSize(horizontal: false, vertical: true) // fix menu bar height bug on first launch
         }
     }
 }
