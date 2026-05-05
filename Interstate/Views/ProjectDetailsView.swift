@@ -13,6 +13,7 @@ struct ProjectDetailsView: View {
     @State private var selectedItem: Item? = nil
     @State private var selectedListItem: Item? = nil
     @State private var showingAlert: Bool = false
+    @State private var confirmDelete: Bool = false
 
     var items: [Item] {
         project.items ?? []
@@ -94,6 +95,19 @@ struct ProjectDetailsView: View {
                         deleteItems(offsets: indexSet, date: date)
                     }
                 }
+            }
+        }
+        #if os(macOS)
+        .onDeleteCommand {
+            guard selectedListItem != nil else { return }
+            confirmDelete = true
+        }
+        #endif
+        .alert("Delete Item?", isPresented: $confirmDelete) {
+            Button("Delete", role: .destructive) {
+                guard let selectedListItem else { return }
+                project.items?.removeAll { $0.id == selectedListItem.id }
+                self.selectedListItem = nil
             }
         }
     }
