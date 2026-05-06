@@ -25,7 +25,7 @@ struct InterstateApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: .init(modelContext: .init(sharedModelContainer)))
         }
         .modelContainer(sharedModelContainer)
 

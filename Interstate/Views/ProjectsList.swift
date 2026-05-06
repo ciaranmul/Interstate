@@ -9,10 +9,10 @@ import SwiftData
 import SwiftUI
 
 struct ProjectsList: View {
-    @Environment(\.modelContext) private var modelContext
-    @State private var selectedProject: Project? = nil
-    @State private var confirmDelete: Bool = false
-    @Query private var projects: [Project]
+    @Binding var projects: Array<Project>
+    @State var selectedProject: Project? = nil
+    @State var confirmDelete: Bool = false
+    let delete: (Project) -> Void
 
     var body: some View {
         List(selection: $selectedProject) {
@@ -35,7 +35,7 @@ struct ProjectsList: View {
         .alert("Delete Project?", isPresented: $confirmDelete) {
             Button("Delete", role: .destructive) {
                 guard let selectedProject else { return }
-                modelContext.delete(selectedProject)
+                delete(selectedProject)
                 self.selectedProject = nil
             }
         }
@@ -44,7 +44,7 @@ struct ProjectsList: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(projects[index])
+                delete(projects[index])
             }
         }
     }
