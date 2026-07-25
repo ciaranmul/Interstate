@@ -13,10 +13,10 @@ final class Item {
     var id: UUID = UUID()
     var project: Project?
     var timestamp: Date = Date.now
-    var entry: String = "New item"
+    var entry: String = ""
 
     init(timestamp: Date = .now,
-         description: String = "New item") {
+         description: String = "") {
         self.timestamp = timestamp
         self.entry = description
     }
