@@ -27,7 +27,7 @@ struct ProjectDetailsView: View {
 
     var dates: [Date] {
         Array(groupedItems.keys).sorted(by: {
-            $0.compare($1) == .orderedAscending
+            $0.compare($1) == .orderedDescending
         })
     }
 
