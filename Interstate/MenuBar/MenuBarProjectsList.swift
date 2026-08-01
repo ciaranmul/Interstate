@@ -43,7 +43,7 @@ struct MenuBarProjectDetailsView: View {
 
     var dates: [Date] {
         Array(groupedItems.keys).sorted(by: {
-            $0.compare($1) == .orderedAscending
+            $0.compare($1) == .orderedDescending
         })
     }
 
@@ -90,6 +90,7 @@ struct MenuBarProjectDetailsView: View {
                 }
             }
         }
+        .fixedSize(horizontal: false, vertical: true) // fix list height bug
     }
 
     private func items(for date: Date) -> [Item] {
