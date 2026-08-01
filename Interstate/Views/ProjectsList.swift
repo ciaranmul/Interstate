@@ -10,19 +10,16 @@ import SwiftUI
 
 struct ProjectsList: View {
     @Binding var projects: Array<Project>
-    @State var selectedProject: Project? = nil
+    @Binding var selectedProject: Project?
     @State var confirmDelete: Bool = false
     let delete: (Project) -> Void
 
     var body: some View {
         List(selection: $selectedProject) {
             ForEach(projects) { project in
-                NavigationLink {
-                    ProjectDetailsView(project: project)
-                } label: {
+                NavigationLink(value: project) {
                     Text(project.title)
                 }
-                .tag(project)
             }
             .onDelete(perform: deleteItems)
         }

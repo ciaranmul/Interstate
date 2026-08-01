@@ -10,10 +10,11 @@ import SwiftData
 
 struct ContentView: View {
     @State var viewModel: ViewModel
+    @State private var selectedProject: Project? = nil
 
     var body: some View {
         NavigationSplitView {
-            ProjectsList(projects: $viewModel.projects) {
+            ProjectsList(projects: $viewModel.projects, selectedProject: $selectedProject) {
                 viewModel.delete($0)
             }
             .navigationTitle("Projects")
@@ -33,7 +34,11 @@ struct ContentView: View {
                 }
             }
         } detail: {
-            ContentUnavailableView("Select a project.", systemImage: "pencil", description: Text("Use '+' to add a new project if you don't see any."))
+            if let selectedProject {
+                ProjectDetailsView(project: selectedProject)
+            } else {
+                ContentUnavailableView("Select a project.", systemImage: "pencil", description: Text("Use '+' to add a new project if you don't see any."))
+            }
         }
         .onAppear {
             viewModel.fetchData()
