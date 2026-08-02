@@ -9,13 +9,15 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @State var viewModel: ViewModel
+    @Environment(AppModel.self) var appModel
     @State private var selectedProject: Project? = nil
 
     var body: some View {
+        @Bindable var appModel = appModel
+
         NavigationSplitView {
-            ProjectsList(projects: $viewModel.projects, selectedProject: $selectedProject) {
-                viewModel.delete($0)
+            ProjectsList(projects: $appModel.projects, selectedProject: $selectedProject) {
+                appModel.delete($0)
             }
             .navigationTitle("Projects")
             #if os(macOS)
@@ -41,56 +43,56 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            viewModel.fetchData()
+            appModel.fetchData()
         }
     }
 
     private func addItem() {
         withAnimation {
             let newProject = Project()
-            viewModel.add(newProject)
+            appModel.add(newProject)
         }
     }
 }
 
-extension ContentView {
-    @Observable
-    class ViewModel {
-        let modelContext: ModelContext
-        var projects: [Project]
-        var error: Error?
-
-        init(modelContext: ModelContext) {
-            self.modelContext = modelContext
-            self.projects = []
-        }
-
-        func fetchData() {
-            do {
-                let descriptor = FetchDescriptor<Project>(sortBy: [SortDescriptor(\.title)])
-                projects = try modelContext.fetch(descriptor)
-            } catch {
-                self.error = error
-            }
-        }
-
-        func delete(_ project: Project) {
-            defer {
-                fetchData()
-            }
-
-            modelContext.delete(project)
-        }
-
-        func add(_ project: Project) {
-            defer {
-                fetchData()
-            }
-
-            modelContext.insert(project)
-        }
-    }
-}
+//extension ContentView {
+//    @Observable
+//    class ViewModel {
+//        let modelContext: ModelContext
+//        var projects: [Project]
+//        var error: Error?
+//
+//        init(modelContext: ModelContext) {
+//            self.modelContext = modelContext
+//            self.projects = []
+//        }
+//
+//        func fetchData() {
+//            do {
+//                let descriptor = FetchDescriptor<Project>(sortBy: [SortDescriptor(\.title)])
+//                projects = try modelContext.fetch(descriptor)
+//            } catch {
+//                self.error = error
+//            }
+//        }
+//
+//        func delete(_ project: Project) {
+//            defer {
+//                fetchData()
+//            }
+//
+//            modelContext.delete(project)
+//        }
+//
+//        func add(_ project: Project) {
+//            defer {
+//                fetchData()
+//            }
+//
+//            modelContext.insert(project)
+//        }
+//    }
+//}
 
 //#Preview {
 //    ContentView(viewModel: .init(modelContext: .init(.init(for: Item.self, inMemory: true))))
